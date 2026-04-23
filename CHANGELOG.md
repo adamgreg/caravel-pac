@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.2...caravel-pac-v1.0.3) - 2026-04-23
+
+### Other
+
+- Add "mock-registers" feature for use in unit tests on host platform
+
 ## [1.0.2](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.1...caravel-pac-v1.0.2) - 2026-04-23
 
 ### Other
