@@ -1,6 +1,6 @@
 [package]
 name = "caravel-pac-macros"
-version = "1.0.0"
+version = "1.0.1"
 description = "Proc macro crate to support the caravel-pac crate."
 keywords = ["riscv", "caravel", "caravan", "chipignite", "chipfoundry"]
 repository = "https://github.com/adamgreg/caravel-pac"
