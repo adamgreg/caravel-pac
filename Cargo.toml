@@ -3,7 +3,7 @@ members = [".", "caravel-pac-macros"]
 
 [package]
 name = "caravel-pac"
-version = "1.0.0"
+version = "1.0.1"
 description = "Peripheral Access Crate for the Caravel management SoC."
 repository = "https://github.com/adamgreg/caravel-pac"
 authors = ["Adam Gregory <adam@aguilaengineering.com>"]
