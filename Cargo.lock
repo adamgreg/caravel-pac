@@ -15,7 +15,7 @@ dependencies = [
 
 [[package]]
 name = "caravel-pac"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "bitfield-struct",
  "caravel-pac-macros",
