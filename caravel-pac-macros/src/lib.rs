@@ -29,15 +29,23 @@ pub fn register_block(args: TokenStream, input: TokenStream) -> TokenStream {
     format!(
         r#"
         #[repr(C, align(4))]
-        {}
+        {input_str}
         
-        impl {} {{
+        #[cfg(feature = "mock-registers")]
+        unsafe impl Sync for {struct_name} {{}}
+
+        impl {struct_name} {{
             pub const fn new() -> &'static Self {{
-                unsafe {{ &*({} as *const Self) }}
+                #[cfg(not(feature = "mock-registers"))]
+                unsafe {{ &*({base_addr} as *const Self) }}
+                #[cfg(feature = "mock-registers")]
+                {{ static MOCK: {struct_name} = unsafe {{ core::mem::zeroed() }}; &MOCK }}
             }}
         }}
         "#,
-        input_str, struct_name, base_addr
+        input_str = input_str,
+        struct_name = struct_name,
+        base_addr = base_addr
     )
     .parse()
     .unwrap()

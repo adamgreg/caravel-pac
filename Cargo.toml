@@ -21,3 +21,7 @@ vexriscv = "^0.0.3"
 volatile-register = "^0.2.2"
 
 caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.0" }
+
+[features]
+
+mock-registers = [] # Use for unit-testing to avoid out-of-bounds accesses
