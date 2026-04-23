@@ -1,0 +1,22 @@
+[workspace]
+members = [".", "caravel-pac-macros"]
+
+[package]
+name = "caravel-pac"
+version = "1.0.0"
+description = "Peripheral Access Crate for the Caravel management SoC."
+repository = "https://github.com/adamgreg/caravel-pac"
+authors = ["Adam Gregory <adam@aguilaengineering.com>"]
+license = "MIT"
+edition = "2024"
+
+[dependencies]
+bitfield-struct = "^0.12.1"
+critical-section = "^1.2.0"
+riscv = { version = "^0.15.0", features = ["critical-section-single-hart"] }
+riscv-pac = "^0.2.0"
+riscv-rt = { version = "^0.16.0", features = ["single-hart"] }
+vexriscv = "^0.0.3"
+volatile-register = "^0.2.2"
+
+caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.0" }
