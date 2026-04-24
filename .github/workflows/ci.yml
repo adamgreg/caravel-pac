@@ -20,11 +20,11 @@ jobs:
           targets: riscv32i-unknown-none-elf
           components: clippy, rustfmt
       - name: Cargo Check
-        run: cargo check --verbose
+        run: cargo check --workspace --verbose
       - name: Lint
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --workspace -- -D warnings
       - name: Format
         run: cargo fmt --all -- --check
       - name: Test
         # Tests compile for the host, so override the target
-        run: cargo test --target x86_64-unknown-linux-gnu
+        run: cargo test --workspace --target x86_64-unknown-linux-gnu
