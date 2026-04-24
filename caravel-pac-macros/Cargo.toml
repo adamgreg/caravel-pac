@@ -12,3 +12,6 @@ edition = "2024"
 proc-macro = true
 
 [dependencies]
+
+[features]
+mock-registers = [] # Use for testing to avoid out-of-bounds accesses
