@@ -23,5 +23,4 @@ volatile-register = "^0.2.2"
 caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.1" }
 
 [features]
-
-mock-registers = [] # Use for unit-testing to avoid out-of-bounds accesses
+mock-registers = ["caravel-pac-macros/mock-registers"] # Use for testing to avoid out-of-bounds accesses
