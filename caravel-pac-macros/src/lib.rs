@@ -3,9 +3,13 @@ use proc_macro::TokenStream;
 /// Attribute macro to define a memory-mapped register block with a base address
 ///
 /// # Usage
-/// ```ignore
+/// ```rust,ignore
+/// use volatile_register::{RO, RW};
+///
 /// #[register_block(0x2000_0000)]
-/// pub struct MyRegisters { ... }
+/// pub struct MyRegisters {
+///     pub a: RO<u32>, // Address 0x2000_0000, read-only
+/// }
 /// ```
 ///
 /// This will:
@@ -61,4 +65,47 @@ pub fn register_block(#[allow(unused)] args: TokenStream, input: TokenStream) ->
     )
     .parse()
     .unwrap()
+}
+
+/// Attribute macro to define a memory-mapped register block at the given address offset
+/// in the user project area (i.e. on the Wishbone bus).
+///
+/// It is recommended to use
+/// [volatile_register](https://docs.rs/volatile-register/latest/volatile_register/)
+/// to handle access to the individual registers.
+///
+/// # Usage
+/// ```rust,ignore
+/// use volatile_register::{RO, RW};
+///
+/// #[user_register_block]
+/// pub struct MyRegisters {
+///     pub a: RO<u32>, // Address 0x3000_0000, read-only
+///     pub b: [RW<u8>; 8], // Address 0x3000_0004 to 0x3000_000B, read-write
+///     pub c: RW<u32>, // Address 0x3000_000C, read-write
+/// }
+///
+/// #[user_register_block(0x100)]
+/// pub struct MyRegistersTwo {
+///     pub d: RW<u32>, // Address 0x3000_0100
+///     _pad: [u32; 4], // Padding - no hardware mapped to these addresses
+///     pub e: RW<u32>, // Address 0x3000_0114
+/// }
+/// ```
+///
+/// This will:
+/// - Calculate the memory-mapped base address, by adding the offset to the base of the user area (0x3000_0000)
+/// - Add `#[repr(C)]` to the struct
+/// - Generate a `new()` method that returns a static reference at the base address
+/// - If the `mock-registers` feature of `caravel-pac` is enabled,
+///   a safe static instance is created instead of mapping to the specified address
+#[proc_macro_attribute]
+pub fn user_register_block(#[allow(unused)] args: TokenStream, input: TokenStream) -> TokenStream {
+    // Add any offset to the user project base address
+    let new_args: TokenStream = if args.is_empty() {
+        "0x3000_0000".parse().unwrap()
+    } else {
+        format!("(0x3000_0000 + {args})").parse().unwrap()
+    };
+    register_block(new_args, input)
 }
