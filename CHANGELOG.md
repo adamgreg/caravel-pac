@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.3...caravel-pac-v1.0.4) - 2026-04-24
+
+### Other
+
+- Update CI to make sure the caravel-pac-macros crate is covered
+- Add #[user_register_block] proc macro
+- Fix mock-registers feature checking in register_block macro
+
 ## [1.0.3](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.2...caravel-pac-v1.0.3) - 2026-04-23
 
 ### Other
