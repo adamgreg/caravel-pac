@@ -575,21 +575,21 @@ mod tests {
     use super::*;
     use core::mem::offset_of;
 
+    /// Helper macro to get the absolute address of a register field
+    macro_rules! addr {
+        ($struct:ty, $field:ident) => {{
+            // Get base address by casting the new() result to usize
+            let base = <$struct>::new() as *const $struct as usize;
+            base + offset_of!($struct, $field)
+        }};
+        ($struct:ty, $field:ident[$idx:expr]) => {{
+            let base = <$struct>::new() as *const $struct as usize;
+            base + offset_of!($struct, $field) + ($idx * core::mem::size_of::<u32>())
+        }};
+    }
+
     #[test]
     fn test_register_addresses() {
-        /// Helper macro to get the absolute address of a register field
-        macro_rules! addr {
-            ($struct:ty, $field:ident) => {{
-                // Get base address by casting the new() result to usize
-                let base = <$struct>::new() as *const $struct as usize;
-                base + offset_of!($struct, $field)
-            }};
-            ($struct:ty, $field:ident[$idx:expr]) => {{
-                let base = <$struct>::new() as *const $struct as usize;
-                base + offset_of!($struct, $field) + ($idx * core::mem::size_of::<u32>())
-            }};
-        }
-
         assert_eq!(addr!(CtrlRegisters, reset), 0xf000_0000);
         assert_eq!(addr!(CtrlRegisters, scratch), 0xf000_0004);
         assert_eq!(addr!(CtrlRegisters, bus_errors), 0xf000_0008);
@@ -657,5 +657,29 @@ mod tests {
         assert_eq!(addr!(SystemRegisters, clk_out_dest), 0x2620_0004);
         assert_eq!(addr!(SystemRegisters, irq_source), 0x2620_000C);
         assert_eq!(addr!(SystemRegisters, hkspi_disable), 0x2620_0010);
+    }
+
+    #[test]
+    fn test_user_register_block() {
+        #[user_register_block]
+        pub struct MyRegisters {
+            pub a: RO<u32>,     // Address 0x3000_0000, read-only
+            pub b: [RW<u8>; 8], // Address 0x3000_0004 to 0x3000_000B, read-write
+            pub c: RW<u32>,     // Address 0x3000_000C, read-write
+        }
+
+        assert_eq!(addr!(MyRegisters, a), 0x3000_0000);
+        assert_eq!(addr!(MyRegisters, b), 0x3000_0004);
+        assert_eq!(addr!(MyRegisters, c), 0x3000_000C);
+
+        #[user_register_block(0x100)]
+        pub struct MyRegistersTwo {
+            pub d: RW<u32>, // Address 0x3000_0100
+            _pad: [u32; 4], // Padding - no hardware mapped to these addresses
+            pub e: RW<u32>, // Address 0x3000_0114
+        }
+
+        assert_eq!(addr!(MyRegistersTwo, d), 0x3000_0100);
+        assert_eq!(addr!(MyRegistersTwo, e), 0x3000_0114);
     }
 }
