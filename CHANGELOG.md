@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.4...caravel-pac-v1.0.5) - 2026-04-24
+
+### Other
+
+- Do not trigger CI workflow twice when pushing to a PR branch
+
 ## [1.0.4](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.3...caravel-pac-v1.0.4) - 2026-04-24
 
 ### Other
