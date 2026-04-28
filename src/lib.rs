@@ -541,7 +541,7 @@ pub use bitfields::*;
 
 /// RISC-V interrupt numbers used by Caravel
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-#[riscv::pac_enum(unsafe ExternalInterruptNumber)]
+#[cfg_attr(feature = "interrupts", riscv::pac_enum(unsafe ExternalInterruptNumber))]
 pub enum CaravelInterrupt {
     Timer0 = 0,
     Uart = 1,
@@ -553,6 +553,7 @@ pub enum CaravelInterrupt {
     User5 = 7,
 }
 
+#[cfg(feature = "interrupts")]
 impl CaravelInterrupt {
     /// Enable this Caravel external interrupt
     pub fn enable(self) {

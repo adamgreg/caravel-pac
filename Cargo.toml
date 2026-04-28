@@ -13,12 +13,14 @@ edition = "2024"
 
 [dependencies]
 bitfield-struct = "^0.12.1"
-riscv = "^0.15.0"
-vexriscv = "^0.0.3"
+riscv = { version = "^0.15.0", optional = true }
+vexriscv = {version = "^0.0.3", optional = true }
 volatile-register = "^0.2.2"
 
 caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.3" }
 
 [features]
+default = ["interrupts"]
+interrupts = ["dep:riscv", "dep:vexriscv"]
 mock-registers = ["caravel-pac-macros/mock-registers"] # Use for testing to avoid out-of-bounds accesses
 mock-user-registers = ["caravel-pac-macros/mock-user-registers"] # Like mock-registers, but only affects user area (Wishbone bus)
