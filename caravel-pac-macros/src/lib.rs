@@ -1,5 +1,49 @@
 use proc_macro::TokenStream;
 
+fn register_block_impl(args: TokenStream, input: TokenStream, use_mock: bool) -> TokenStream {
+    let input_str = input.to_string();
+
+    // Find the struct name by looking for "struct" keyword
+    let struct_pos = input_str
+        .find("struct")
+        .expect("Expected struct definition");
+    let after_struct = &input_str[struct_pos + 6..].trim_start();
+    let struct_name = after_struct
+        .split(|c: char| c.is_whitespace() || c == '{')
+        .next()
+        .expect("Expected struct name");
+
+    let new_body = if use_mock {
+        format!("static MOCK: {struct_name} = unsafe {{ core::mem::zeroed() }}; &MOCK")
+    } else {
+        let base_addr = args.to_string();
+        format!("unsafe {{ &*({base_addr} as *const Self) }}")
+    };
+
+    let sync_impl = if use_mock {
+        format!("unsafe impl Sync for {struct_name} {{}}")
+    } else {
+        String::new()
+    };
+
+    format!(
+        r#"
+        #[repr(C, align(4))]
+        {input_str}
+
+        {sync_impl}
+
+        impl {struct_name} {{
+            pub const fn new() -> &'static Self {{
+                {new_body}
+            }}
+        }}
+        "#
+    )
+    .parse()
+    .unwrap()
+}
+
 /// Attribute macro to define a memory-mapped register block with a base address
 ///
 /// # Usage
@@ -18,53 +62,8 @@ use proc_macro::TokenStream;
 /// - If the `mock-registers` feature of `caravel-pac` is enabled,
 ///   a safe static instance is created instead of mapping to the specified address
 #[proc_macro_attribute]
-pub fn register_block(#[allow(unused)] args: TokenStream, input: TokenStream) -> TokenStream {
-    let input_str = input.to_string();
-
-    // Find the struct name by looking for "struct" keyword
-    let struct_pos = input_str
-        .find("struct")
-        .expect("Expected struct definition");
-    let after_struct = &input_str[struct_pos + 6..].trim_start();
-    let struct_name = after_struct
-        .split(|c: char| c.is_whitespace() || c == '{')
-        .next()
-        .expect("Expected struct name");
-
-    let new_body = cfg_select! {
-        feature = "mock-registers" => {
-            format!("static MOCK: {struct_name} = unsafe {{ core::mem::zeroed() }}; &MOCK")
-        }
-        _ => {{
-            let base_addr = args.to_string();
-            format!("unsafe {{ &*({base_addr} as *const Self) }}")
-        }}
-    };
-
-    let sync_impl = cfg_select! {
-        feature = "mock-registers" => {format!("unsafe impl Sync for {struct_name} {{}}")}
-        _ => ""
-    };
-
-    format!(
-        r#"
-        #[repr(C, align(4))]
-        {input_str}
-        
-        {sync_impl}
-
-        impl {struct_name} {{
-            pub const fn new() -> &'static Self {{
-                {new_body}
-            }}
-        }}
-        "#,
-        input_str = input_str,
-        struct_name = struct_name,
-        new_body = new_body
-    )
-    .parse()
-    .unwrap()
+pub fn register_block(args: TokenStream, input: TokenStream) -> TokenStream {
+    register_block_impl(args, input, cfg!(feature = "mock-registers"))
 }
 
 /// Attribute macro to define a memory-mapped register block at the given address offset
@@ -100,12 +99,12 @@ pub fn register_block(#[allow(unused)] args: TokenStream, input: TokenStream) ->
 /// - If the `mock-registers` feature of `caravel-pac` is enabled,
 ///   a safe static instance is created instead of mapping to the specified address
 #[proc_macro_attribute]
-pub fn user_register_block(#[allow(unused)] args: TokenStream, input: TokenStream) -> TokenStream {
-    // Add any offset to the user project base address
+pub fn user_register_block(args: TokenStream, input: TokenStream) -> TokenStream {
     let new_args: TokenStream = if args.is_empty() {
         "0x3000_0000".parse().unwrap()
     } else {
         format!("(0x3000_0000 + {args})").parse().unwrap()
     };
-    register_block(new_args, input)
+    let use_mock = cfg!(feature = "mock-registers") || cfg!(feature = "mock-user-registers");
+    register_block_impl(new_args, input, use_mock)
 }

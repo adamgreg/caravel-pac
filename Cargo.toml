@@ -24,3 +24,4 @@ caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.2" }
 
 [features]
 mock-registers = ["caravel-pac-macros/mock-registers"] # Use for testing to avoid out-of-bounds accesses
+mock-user-registers = ["caravel-pac-macros/mock-user-registers"] # Like mock-registers, but only affects user area (Wishbone bus)
