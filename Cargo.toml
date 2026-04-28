@@ -13,10 +13,7 @@ edition = "2024"
 
 [dependencies]
 bitfield-struct = "^0.12.1"
-critical-section = "^1.2.0"
-riscv = { version = "^0.15.0", features = ["critical-section-single-hart"] }
-riscv-pac = "^0.2.0"
-riscv-rt = { version = "^0.16.0", features = ["single-hart"] }
+riscv = "^0.15.0"
 vexriscv = "^0.0.3"
 volatile-register = "^0.2.2"
 
