@@ -3,7 +3,7 @@ members = [".", "caravel-pac-macros"]
 
 [package]
 name = "caravel-pac"
-version = "1.0.6"
+version = "2.0.0"
 description = "Peripheral Access Crate for the Caravel management SoC."
 keywords = ["riscv", "caravel", "caravan", "chipignite", "chipfoundry"]
 repository = "https://github.com/adamgreg/caravel-pac"
@@ -17,7 +17,7 @@ riscv = { version = "^0.15.0", optional = true }
 vexriscv = {version = "^0.0.3", optional = true }
 volatile-register = "^0.2.2"
 
-caravel-pac-macros = { path = "caravel-pac-macros", version = "1.0.3" }
+caravel-pac-macros = { path = "caravel-pac-macros", version = "2.0.0" }
 
 [features]
 default = ["interrupts"]
