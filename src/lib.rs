@@ -19,7 +19,7 @@ pub struct ReadmeDoctests;
 // =============================================================================
 
 /// Control registers
-#[register_block(0xf000_0000)]
+#[register_block(base = 0xf000_0000)]
 pub struct CtrlRegisters {
     pub reset: RW<CtrlResetBits>, // 0x0000
     pub scratch: RW<u32>,         // 0x0004
@@ -27,19 +27,19 @@ pub struct CtrlRegisters {
 }
 
 /// DEBUG_MODE_OUT register
-#[register_block(0xf000_0800)]
+#[register_block(base = 0xf000_0800)]
 pub struct DebugModeOutRegister {
     pub value: RW<u32>, // 0x0800
 }
 
 /// DEBUG_OEB_OUT register
-#[register_block(0xf000_1000)]
+#[register_block(base = 0xf000_1000)]
 pub struct DebugOebOutRegister {
     pub value: RW<u32>, // 0x1000
 }
 
 /// FLASH_CORE registers
-#[register_block(0xf000_1800)]
+#[register_block(base = 0xf000_1800)]
 pub struct FlashCoreRegisters {
     pub mmap_dummy_bits: RW<u32>,                  // 0x1800
     pub master_cs: RW<u32>,                        // 0x1804
@@ -49,13 +49,13 @@ pub struct FlashCoreRegisters {
 }
 
 /// FLASH_PHY_CLK_DIVISOR register
-#[register_block(0xf000_2000)]
+#[register_block(base = 0xf000_2000)]
 pub struct FlashPhyClockDivisorRegister {
     pub value: RW<u32>, // 0x2000
 }
 
 /// GPIO registers
-#[register_block(0xf000_2800)]
+#[register_block(base = 0xf000_2800)]
 pub struct GpioRegisters {
     /// DM[2:1] bits of sky130_fd_io__gpiov2 cell
     /// - `0`: output driver disabled
@@ -80,7 +80,7 @@ pub struct GpioRegisters {
 }
 
 /// Logic Analyzer registers (128 bits each, split into 4x32)
-#[register_block(0xf000_3000)]
+#[register_block(base = 0xf000_3000)]
 pub struct LaRegisters {
     pub ien: [RW<u32>; 4],    // 0x3000-0x300C
     pub oe: [RW<u32>; 4],     // 0x3010-0x301C
@@ -89,19 +89,19 @@ pub struct LaRegisters {
 }
 
 /// MPRJ_WB_IENA_OUT register
-#[register_block(0xf000_3800)]
+#[register_block(base = 0xf000_3800)]
 pub struct MprjWbIenaOutRegister {
     pub value: RW<u32>, // 0x3800
 }
 
 /// SPI_ENABLED_OUT register
-#[register_block(0xf000_4000)]
+#[register_block(base = 0xf000_4000)]
 pub struct SpiEnabledOutRegister {
     pub value: RW<u32>, // 0x4000
 }
 
 /// SPI Master registers
-#[register_block(0xf000_4800)]
+#[register_block(base = 0xf000_4800)]
 pub struct SpiMasterRegisters {
     pub control: RW<SpiControlBits>,   // 0x4800
     pub status: RO<SpiStatusBits>,     // 0x4804
@@ -113,7 +113,7 @@ pub struct SpiMasterRegisters {
 }
 
 /// Timer0 registers
-#[register_block(0xf000_5000)]
+#[register_block(base = 0xf000_5000)]
 pub struct Timer0Registers {
     pub load: RW<u32>,                  // 0x5000
     pub reload: RW<u32>,                // 0x5004
@@ -126,7 +126,7 @@ pub struct Timer0Registers {
 }
 
 /// UART registers
-#[register_block(0xf000_5800)]
+#[register_block(base = 0xf000_5800)]
 pub struct UartRegisters {
     pub rxtx: RW<u32>,                 // 0x5800
     pub txfull: RO<u32>,               // 0x5804
@@ -139,13 +139,13 @@ pub struct UartRegisters {
 }
 
 /// UART_ENABLED_OUT register
-#[register_block(0xf000_6000)]
+#[register_block(base = 0xf000_6000)]
 pub struct UartEnabledOutRegister {
     pub value: RW<u32>, // 0x6000
 }
 
 /// USER_IRQ_0 registers
-#[register_block(0xf000_6800)]
+#[register_block(base = 0xf000_6800)]
 pub struct UserIrq0Registers {
     pub input: RO<u32>,                   // 0x6800
     pub mode: RW<u32>,                    // 0x6804
@@ -156,7 +156,7 @@ pub struct UserIrq0Registers {
 }
 
 /// USER_IRQ_1 registers
-#[register_block(0xf000_7000)]
+#[register_block(base = 0xf000_7000)]
 pub struct UserIrq1Registers {
     pub input: RO<u32>,                   // 0x7000
     pub mode: RW<u32>,                    // 0x7004
@@ -167,7 +167,7 @@ pub struct UserIrq1Registers {
 }
 
 /// USER_IRQ_2 registers
-#[register_block(0xf000_7800)]
+#[register_block(base = 0xf000_7800)]
 pub struct UserIrq2Registers {
     pub input: RO<u32>,                   // 0x7800
     pub mode: RW<u32>,                    // 0x7804
@@ -178,7 +178,7 @@ pub struct UserIrq2Registers {
 }
 
 /// USER_IRQ_3 registers
-#[register_block(0xf000_8000)]
+#[register_block(base = 0xf000_8000)]
 pub struct UserIrq3Registers {
     pub input: RO<u32>,                   // 0x8000
     pub mode: RW<u32>,                    // 0x8004
@@ -189,7 +189,7 @@ pub struct UserIrq3Registers {
 }
 
 /// USER_IRQ_4 registers
-#[register_block(0xf000_8800)]
+#[register_block(base = 0xf000_8800)]
 pub struct UserIrq4Registers {
     pub input: RO<u32>,                   // 0x7000
     pub mode: RW<u32>,                    // 0x7004
@@ -200,7 +200,7 @@ pub struct UserIrq4Registers {
 }
 
 /// USER_IRQ_5 registers
-#[register_block(0xf000_9000)]
+#[register_block(base = 0xf000_9000)]
 pub struct UserIrq5Registers {
     pub input: RO<u32>,                   // 0x7000
     pub mode: RW<u32>,                    // 0x7004
@@ -211,7 +211,7 @@ pub struct UserIrq5Registers {
 }
 
 /// User project control registers
-#[register_block(0x2600_0000)]
+#[register_block(base = 0x2600_0000)]
 pub struct UserProjectRegisters {
     pub xfer: RW<UserIoXferBits>, // 0x2600_0000
     pub pwr: RW<u32>,             // 0x2600_0004
@@ -223,7 +223,7 @@ pub struct UserProjectRegisters {
 }
 
 /// Housekeeping SPI registers
-#[register_block(0x2610_0000)]
+#[register_block(base = 0x2610_0000)]
 pub struct HousekeepingRegisters {
     pub status: RO<u32>,      // 0x2610_0000
     pub chip_id: RO<u32>,     // 0x2610_0004
@@ -238,7 +238,7 @@ pub struct HousekeepingRegisters {
 }
 
 /// System area registers
-#[register_block(0x2620_0000)]
+#[register_block(base = 0x2620_0000)]
 pub struct SystemRegisters {
     pub power_good: RO<u32>,   // 0x2620_0000 // FIXME define bitfield
     pub clk_out_dest: RW<u32>, // 0x2620_0004 // FIXME define bitfield
@@ -666,21 +666,20 @@ mod tests {
         pub struct MyRegisters {
             pub a: RO<u32>,     // Address 0x3000_0000, read-only
             pub b: [RW<u8>; 8], // Address 0x3000_0004 to 0x3000_000B, read-write
-            pub c: RW<u32>,     // Address 0x3000_000C, read-write
+            pub c: RW<bool>,    // Address 0x3000_000C, read-write
         }
 
         assert_eq!(addr!(MyRegisters, a), 0x3000_0000);
         assert_eq!(addr!(MyRegisters, b), 0x3000_0004);
         assert_eq!(addr!(MyRegisters, c), 0x3000_000C);
 
-        #[user_register_block(0x100)]
+        #[user_register_block(offset = 0x100, stride = 4)]
         pub struct MyRegistersTwo {
-            pub d: RW<u32>, // Address 0x3000_0100
-            _pad: [u32; 4], // Padding - no hardware mapped to these addresses
-            pub e: RW<u32>, // Address 0x3000_0114
+            pub d: RW<u8>,  // Address 0x3000_0100
+            pub e: RW<u32>, // Address 0x3000_0104
         }
 
         assert_eq!(addr!(MyRegistersTwo, d), 0x3000_0100);
-        assert_eq!(addr!(MyRegistersTwo, e), 0x3000_0114);
+        assert_eq!(addr!(MyRegistersTwo, e), 0x3000_0104);
     }
 }
