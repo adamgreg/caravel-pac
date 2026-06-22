@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.6...caravel-pac-v2.0.0) - 2026-06-22
+
+### Added
+
+- [**breaking**] Add optional `stride` named argument to register block macros
+
+### Other
+
+- *(deps)* bump actions/checkout from 6 to 7
+
 ## [1.0.6](https://github.com/adamgreg/caravel-pac/compare/caravel-pac-v1.0.5...caravel-pac-v1.0.6) - 2026-04-28
 
 ### Other
